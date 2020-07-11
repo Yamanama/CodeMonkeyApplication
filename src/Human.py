@@ -1,12 +1,14 @@
-class Human():
+import logging
+from Player import Player
+
+class Human(Player):
     def __init__(self):
-        self.square_hub = []
-        def __init__(self):
-        self.logger = logging.getLogger(__name__)
-        logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s')
+        super().__init__()
 
 
-def check_square_hub:
+#def roll_dice:
+
+#def check_square_hub:
     
 
-def add_quare:
+#def add_quare:

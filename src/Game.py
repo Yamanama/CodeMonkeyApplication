@@ -6,6 +6,7 @@ import time
 from Dice import Dice
 from DatabaseHandler import DatabaseHandler
 from QuestionHandler import QuestionHandler
+from SettingsHandler import SettingsHandler
 from Human import Human
 from Computer import Computer
 
@@ -23,8 +24,17 @@ class Game():
         Initialize the game
         """
         self.logger.info("Initializing Database")
-        self.human = Human()
+        self.settingsHandler = SettingsHandler()
+        self.settingsHandler.select_number_of_players()
+        #create Computer instance (one computer always plays the game)
         self.computer = Computer()
+        #create selected number of players
+        self.humanPlayers = [Human() for i in range(self.settingsHandler.number_players)] 
+
+        #set player names
+        
+
+
         self.database = DatabaseHandler()
         self.questionHandler = QuestionHandler()
         self.dice = Dice(6)
