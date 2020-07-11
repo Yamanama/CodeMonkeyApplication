@@ -10,9 +10,19 @@ class SettingsHandler():
         number_players = 0
         while number_players < 1 or 3 < number_players: 
             try:
-                self.logger.info("How many human players are playing? Select 1-3")
+                self.logger.info("How many human players are playing? Select 1-4")
                 number_players = int(input())
                 self.number_players = number_players
             except ValueError:
-                    number_players = 0
+                number_players = 0
         return number_players
+    
+    def select_computer_difficulty_level(self):
+        max_difficulty = 0
+        while max_difficulty < 1 or 100 < max_difficulty:
+            try:
+                self.logger.info("What is the max difficulty for computer players? Select 0-100")
+                max_difficulty = int(input())
+            except ValueError:
+                max_difficulty = 0
+        return max_difficulty

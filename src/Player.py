@@ -1,5 +1,8 @@
 import logging
 class Player():
+    """
+    Player class
+    """
     def __init__(self):
         self.name = ""
         self.number = 0
@@ -8,6 +11,9 @@ class Player():
         logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s')
 
     def set_name(self, player_number):
+        """
+        Set name of the player
+        """
         try:
             self.logger.info("What's the name of player " + str(player_number) + "?")
             self.name = str(input())

@@ -1,13 +1,14 @@
 
 import random
 import logging
+from Human import Human
 
 class QuestionHandler():
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s')
     
-    def query_user(self, question):
+    def query_user(self, question, player):
         """
         query the user
 
@@ -26,13 +27,16 @@ class QuestionHandler():
         for index, answer in enumerate(answers):
             self.logger.info("\t{0}: {1}".format(str(index+1), answer.strip()))
         selection = 0
-        # get a valid selection from the user
-        while selection < 1 or 4 < selection: 
-            try:
-                self.logger.info("Select an answer(1-4): ")
-                selection = int(input())
-            except ValueError:
-                selection = 0
+        if(type(player) is Human):
+            # get a valid selection from the user
+            while selection < 1 or 4 < selection: 
+                try:
+                    self.logger.info("Select an answer(1-4): ")
+                    selection = int(input())
+                except ValueError:
+                    selection = 0
+        else:
+            selection = player.answer_question(question, answers)
         return answers[selection - 1]
     def evaluate(self, question, answer):
         """

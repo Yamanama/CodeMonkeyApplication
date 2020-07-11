@@ -10,9 +10,6 @@ class DatabaseHandler():
 
         Raises -- sys.exit if the database .csv is not found
     """
-
-
-
     def __init__(self):
         self.red_questions = []
         self.white_questions = []
@@ -21,7 +18,6 @@ class DatabaseHandler():
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.data, self.red_questions, self.white_questions, self.blue_questions, self.green_questions = self.populate_database_from_file("../database/QuestionDB.csv")
-
 
     def populate_database_from_file(self, file_path="../database/QuestionDB.csv"):
         """
