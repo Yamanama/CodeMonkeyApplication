@@ -6,6 +6,8 @@ import time
 from Dice import Dice
 from DatabaseHandler import DatabaseHandler
 from QuestionHandler import QuestionHandler
+from Human import Human
+from Computer import Computer
 
 class Game():
     """
@@ -14,13 +16,15 @@ class Game():
     def __init__(self):
         self.logger = logging.getLogger("Game")
         logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
-        self.colors = [ 'red', 'white' ]
+        self.colors = [ 'red', 'white', 'blue', 'green']
         self.init_game()
     def init_game(self):
         """
         Initialize the game
         """
         self.logger.info("Initializing Database")
+        self.human = Human()
+        self.computer = Computer()
         self.database = DatabaseHandler()
         self.questionHandler = QuestionHandler()
         self.dice = Dice(6)
@@ -35,6 +39,8 @@ class Game():
         """
         try:
             while(True):
+                #Human starts a game
+                self.logger.info("You start a game!")
                 # simulate roll
                 roll = self.dice.roll()
                 self.logger.info("You rolled a {0}".format(roll))
