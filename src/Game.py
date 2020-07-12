@@ -3,6 +3,7 @@ import random
 import sys
 import time
 
+from Board import Board
 from Dice import Dice
 from DatabaseHandler import DatabaseHandler
 from QuestionHandler import QuestionHandler
@@ -27,6 +28,7 @@ class Game():
         self.database = DatabaseHandler()
         self.questionHandler = QuestionHandler()
         self.settingsHandler = SettingsHandler()
+        self.board = Board()
         self.logger.info("Gathering Settings")
         human_player_number = self.settingsHandler.select_number_of_players()
         max_difficulty = self.settingsHandler.select_computer_difficulty_level()
@@ -62,7 +64,7 @@ class Game():
                     # simulate moving the piece
                     self.logger.info("Moving the piece of " + player.name + "...")
                     # simulate landing on a color
-                    color = random.choice(self.colors)
+                    color = self.board.location();
                     self.logger.info(player.name +  " landed on {0}".format(color))
                     self.logger.debug("Selecting {0} question".format(color))
                     # get a question from the color type
