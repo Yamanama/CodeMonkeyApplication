@@ -31,7 +31,7 @@ class Game():
         self.board = Board()
         self.logger.info("Gathering Settings")
         human_player_number = self.settingsHandler.select_number_of_players()
-        max_difficulty = self.settingsHandler.select_computer_difficulty_level()
+        max_difficulty = 50 #self.settingsHandler.select_computer_difficulty_level()
 
         #create selected number of players
         self.players = [Human() for i in range(self.settingsHandler.number_players)] 
