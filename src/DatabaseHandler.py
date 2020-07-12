@@ -49,7 +49,7 @@ class DatabaseHandler():
 
                     except Exception:
                         self.logger.error("Error parsing row: {0}".format(row))
-        except FileNotFoundError:
+        except FileNotFoundError: #pragma: no cover
             # no point in having a game with no questions
             sys.exit()
         return data, red_questions, white_questions, blue_questions, green_questions

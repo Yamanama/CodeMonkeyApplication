@@ -14,8 +14,5 @@ class Player():
         """
         Set name of the player
         """
-        try:
-            self.logger.info("What's the name of player " + str(player_number) + "?")
-            self.name = str(input())
-        except ValueError:
-            self.name = ""
+        self.logger.info("What's the name of player " + str(player_number) + "?")
+        self.name = str(input())

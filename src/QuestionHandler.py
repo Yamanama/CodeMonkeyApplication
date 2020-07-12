@@ -33,7 +33,7 @@ class QuestionHandler():
                 try:
                     self.logger.info("Select an answer(1-4): ")
                     selection = int(input())
-                except ValueError:
+                except ValueError:  #pragma: no cover
                     selection = 0
         else:
             selection = player.answer_question(question, answers)

@@ -13,7 +13,7 @@ class SettingsHandler():
                 self.logger.info("How many human players are playing? Select 1-4")
                 number_players = int(input())
                 self.number_players = number_players
-            except ValueError:
+            except ValueError: # pragma: no cover
                 number_players = 0
         return number_players
     
@@ -23,6 +23,6 @@ class SettingsHandler():
             try:
                 self.logger.info("What is the max difficulty for computer players? Select 0-100")
                 max_difficulty = int(input())
-            except ValueError:
+            except ValueError: # pragma: no cover
                 max_difficulty = 0
         return max_difficulty

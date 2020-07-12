@@ -53,7 +53,7 @@ class Game():
         Raises:
             - sys.exit on keyboard interrupt
         """
-        try:
+        try: # pragma: no cover
             while(True):
                 for player in self.players:
                     #Human starts a game
@@ -74,7 +74,7 @@ class Game():
                     # evaluate the answer
                     self.questionHandler.evaluate(question, answer)
                     time.sleep(1)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt: #pragma: no cover
             sys.exit()
 
 if __name__ == "__main__": #pragma no cover
