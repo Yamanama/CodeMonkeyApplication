@@ -1,6 +1,5 @@
 import pygame
-from Board import Board
-from Player import Player
+from Title import Title
 class Game(object):
     """
     The Game - Based on the pygame framework
@@ -22,50 +21,28 @@ class Game(object):
         self.background = self.colors['black']
         self.screen_width = 900
         self.screen_height = 900
-        self.board = Board(self.colors, self.screen_width, self.screen_height)
         self.screen = pygame.display.set_mode((self.screen_width,self.screen_height))
-        self.cell_width = self.screen_width / len(self.board.board) 
-        self.cell_height = self.screen_height / len(self.board.board[0])
+        self.active_scene = Title(self.colors)
         self.running = True
     def run(self):
         """
         Run loop - Show the game board
         """
         while self.running:
-            # Change the caption to the player and moves
-            caption = "Player:" + str(self.board.players[self.board.current_player].avatar) + " Moves: " + str(self.board.moves)
-            # Display the caption
-            pygame.display.set_caption(caption)
-            # Paint the background
-            self.screen.fill(self.background)
-            # Draw the board
-            self.board.draw(self.screen)
-            # Handle key events
-            self.handle_events()
-            # Update the drawing
-            self.update()
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_ESCAPE:
+                        self.running = False
+            self.active_scene.process_input(events)
+            self.active_scene.update()
+            self.active_scene.render(self.screen)
+            self.active_scene = self.active_scene.next
+            pygame.display.update()
+            self.clock.tick(60)
         pygame.quit()
-    def update(self):
-        """
-        Update the drawing
-        """
-        pygame.display.update()
-        self.clock.tick(60)
-
-    def handle_events(self):
-        """
-        Handle user events
-        """
-        for event in pygame.event.get():
-            # print(event)
-            if event.type == pygame.KEYUP:
-                # send key strokes to the board
-                self.board.move_player(event.key, self.board.players[self.board.current_player])
-                # escape to quit
-                if event.key == pygame.K_ESCAPE: 
-                    self.running = False   
-            if event.type == pygame.QUIT:
-                self.running = False
 
 if __name__ == "__main__": 
     game = Game()

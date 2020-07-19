@@ -1,11 +1,13 @@
 from Cell import Cell
 from Player import Player
+from Scene import Scene
 import pygame
-class Board():
+class Board(Scene):
     """
     The board
     """
     def __init__(self, colors, width, height):
+        super().__init__()
         self.players = [Player("assets/laughing.png", 0, 0), Player("assets/neutral.png", 0, 50), Player("assets/shy.png", 50, 0), Player("assets/smile.png", 50, 50)]
         self.current_player = 0
         # TODO Hook this up to dice
@@ -94,6 +96,7 @@ class Board():
         """
         Draw the board on screen
         """
+        screen.fill(pygame.Color('black'))
         self.draw_board(screen)
         self.draw_player_stats(screen)
         self.draw_players(screen)
@@ -127,3 +130,22 @@ class Board():
         Get the color of a cell
         """
         return self.board[x][y].color
+    
+    def process_input(self, events):
+        for event in events:
+            # print(event)
+            if event.type == pygame.KEYUP:
+                # send key strokes to the board
+                self.move_player(event.key, self.players[self.current_player])
+                # escape to quit
+                if event.key == pygame.K_ESCAPE: 
+                    self.running = False
+    def update(self):
+        pass
+
+    def render(self,screen):
+        # Change the caption to the player and moves
+        caption = "Player:" + str(self.players[self.current_player].avatar) + " Moves: " + str(self.moves)
+        # Display the caption
+        pygame.display.set_caption(caption)
+        self.draw(screen)
