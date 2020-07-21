@@ -1,13 +1,14 @@
 import pygame
 from Scene import Scene
 from Board import Board
+from Player import Player
+from Question import Question
 class Title(Scene):
     """
     Title scene. Entry point for the game
     """
-    def __init__(self, colors):
+    def __init__(self):
         super().__init__()
-        self.colors = colors
         self.font = pygame.font.SysFont("Arial", 32) 
         self.small_font = pygame.font.SysFont("Arial", 14)       
         self.title = self.font.render("Trivial Purfuit", True, (0,128,0))
@@ -22,7 +23,7 @@ class Title(Scene):
     def process_input(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                self.switch_scene(Board(self.colors, self.width, self.height))
+                self.switch_scene(Board(self.width, self.height))
     def update(self):
         pass
     

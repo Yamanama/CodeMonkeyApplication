@@ -1,12 +1,14 @@
 from Cell import Cell
 from Player import Player
+from Question import Question
+from Victory import Victory
 from Scene import Scene
 import pygame
 class Board(Scene):
     """
     The board
     """
-    def __init__(self, colors, width, height):
+    def __init__(self, width, height):
         super().__init__()
         self.players = [Player("assets/laughing.png", 0, 0), Player("assets/neutral.png", 0, 50), Player("assets/shy.png", 50, 0), Player("assets/smile.png", 50, 50)]
         self.current_player = 0
@@ -14,15 +16,15 @@ class Board(Scene):
         self.moves = 3
         # The board
         self.board = [
-            [Cell(colors['red']), Cell(colors['white']), Cell(colors['blue']), Cell(colors['green']), Cell(colors['red']), Cell(colors['white']), Cell(colors['blue']), Cell(colors['green']), Cell(colors['white'])],
-            [Cell(colors['white']), None, None, None, Cell(colors['blue']), None, None, None, Cell(colors['blue'])],
-            [Cell(colors['blue']), None, None, None, Cell(colors['white']), None, None, None, Cell(colors['green'])],
-            [Cell(colors['green']), None, None, None, Cell(colors['green']), None, None, None, Cell(colors['red'])],
-            [Cell(colors['red']), Cell(colors['white']), Cell(colors['blue']), Cell(colors['green']), Cell(colors['black']), Cell(colors['green']), Cell(colors['red']), Cell(colors['blue']), Cell(colors['white'])],
-            [Cell(colors['blue']), None, None, None, Cell(colors['green']), None, None, None, Cell(colors['blue'])],
-            [Cell(colors['green']), None, None, None, Cell(colors['white']), None, None, None, Cell(colors['green'])],
-            [Cell(colors['red']), None, None, None, Cell(colors['red']), None, None, None, Cell(colors['red'])],
-            [Cell(colors['white']), Cell(colors['blue']), Cell(colors['red']), Cell(colors['green']), Cell(colors['blue']), Cell(colors['white']), Cell(colors['red']), Cell(colors['green']), Cell(colors['blue'])],      
+            [Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('white')],
+            [Cell('white'), None, None, None, Cell('blue'), None, None, None, Cell('blue')],
+            [Cell('blue'), None, None, None, Cell('white'), None, None, None, Cell('green')],
+            [Cell('green'), None, None, None, Cell('green'), None, None, None, Cell('red')],
+            [Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('black'), Cell('green'), Cell('red'), Cell('blue'), Cell('white')],
+            [Cell('blue'), None, None, None, Cell('green'), None, None, None, Cell('blue')],
+            [Cell('green'), None, None, None, Cell('white'), None, None, None, Cell('green')],
+            [Cell('red'), None, None, None, Cell('red'), None, None, None, Cell('red')],
+            [Cell('white'), Cell('blue'), Cell('red'), Cell('green'), Cell('blue'), Cell('white'), Cell('red'), Cell('green'), Cell('blue')],      
         ]
         self.width = width
         self.height = height
@@ -85,10 +87,13 @@ class Board(Scene):
         column = int(current_player.x/self.cell_width)
         row = int(current_player.y/self.cell_height)
         color = self.get_cell_color(row, column)
-        # TODO: ask question scene here?
-        if color not in current_player.pies and color != pygame.Color('black'):
-            # Add a 'pie' to the player
-            current_player.pies.append(color)
+        if color != 'black':
+            self.switch_scene(Question(color, self, current_player, False))
+        else:
+            if len(current_player.pies) == 4:
+                self.switch_scene(Question(color, self, current_player, True))
+            else:
+                self.switch_scene(Question(color, self, current_player, False))
         self.current_player +=1
         if self.current_player > 3:
             self.current_player = 0
@@ -124,7 +129,7 @@ class Board(Scene):
             for column in range(len(self.board[row])):
                 if self.board[column][row] is not None:
                     cell = self.board[column][row]
-                    pygame.draw.rect(screen, cell.color, (row*self.cell_width, column*self.cell_height, self.cell_width, self.cell_height))
+                    pygame.draw.rect(screen, pygame.Color(cell.color), (row*self.cell_width, column*self.cell_height, self.cell_width, self.cell_height))
     def get_cell_color(self, x,y):
         """
         Get the color of a cell

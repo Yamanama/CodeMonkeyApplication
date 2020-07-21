@@ -8,21 +8,13 @@ class Game(object):
     def __init__(self):
         super().__init__()
         pygame.init()
-        # colors
-        self.colors = {    
-            'black': (0,0,0),
-            'blue': (0,0,255),
-            'green': (0,255,0),
-            'white': (255,255,255),
-            'red': (255,0,0)
-        }
         # clock - for FPS
         self.clock = pygame.time.Clock()
-        self.background = self.colors['black']
+        self.background = pygame.Color('black')
         self.screen_width = 900
         self.screen_height = 900
         self.screen = pygame.display.set_mode((self.screen_width,self.screen_height))
-        self.active_scene = Title(self.colors)
+        self.active_scene = Title()
         self.running = True
     def run(self):
         """
