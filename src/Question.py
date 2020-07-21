@@ -47,7 +47,7 @@ class Question(Scene):
     def update(self):
         pass
     def render(self, screen):
-        caption = "Question for " + self.player.avatar 
+        caption = "Question for " + self.player.name 
         pygame.display.set_caption(caption)
         screen.fill(pygame.Color('black'))
         question = self.font.render(self.question['question'], True, pygame.Color(self.color))

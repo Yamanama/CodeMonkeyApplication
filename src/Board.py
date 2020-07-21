@@ -3,6 +3,7 @@ from Player import Player
 from Question import Question
 from Victory import Victory
 from Scene import Scene
+from Dice import Dice
 import pygame
 class Board(Scene):
     """
@@ -10,10 +11,10 @@ class Board(Scene):
     """
     def __init__(self, width, height):
         super().__init__()
-        self.players = [Player("assets/laughing.png", 0, 0), Player("assets/neutral.png", 0, 50), Player("assets/shy.png", 50, 0), Player("assets/smile.png", 50, 50)]
+        self.players = [Player( "1", "assets/laughing.png", 0, 0), Player("2","assets/neutral.png", 0, 50), Player("3", "assets/shy.png", 50, 0), Player("4","assets/smile.png", 50, 50)]
         self.current_player = 0
-        # TODO Hook this up to dice
-        self.moves = 3
+        self.dice = Dice()
+        self.moves = self.dice.roll()
         # The board
         self.board = [
             [Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('white')],
@@ -76,8 +77,7 @@ class Board(Scene):
         """
         self.moves -= 1
         if self.moves <= 0:
-            # TODO: Hook this up to dice
-            self.moves = 3
+            self.moves = self.dice.roll()
             self.next_player()
     def next_player(self):
         """
@@ -150,7 +150,7 @@ class Board(Scene):
 
     def render(self,screen):
         # Change the caption to the player and moves
-        caption = "Player:" + str(self.players[self.current_player].avatar) + " Moves: " + str(self.moves)
+        caption = "Player:" + str(self.players[self.current_player].name) + " Moves: " + str(self.moves)
         # Display the caption
         pygame.display.set_caption(caption)
         self.draw(screen)

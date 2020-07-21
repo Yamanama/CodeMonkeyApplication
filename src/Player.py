@@ -4,9 +4,9 @@ class Player():
     """
     Player
     """
-    def __init__(self, avatar="assets/laughing.png", offsetX=0, offsetY=0):
+    def __init__(self, name, avatar="assets/laughing.png", offsetX=0, offsetY=0):
         # TODO: Hook up to settings scene?
-        self.name = "testName"
+        self.name = name
         self.avatar = avatar
         self.x = 400
         self.y = 400
