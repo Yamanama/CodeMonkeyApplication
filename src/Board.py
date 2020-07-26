@@ -1,17 +1,26 @@
 from Cell import Cell
-from Player import Player
+from Computer import Computer
+from Human import Human
 from Question import Question
 from Victory import Victory
 from Scene import Scene
 from Dice import Dice
 import pygame
+import os
+import time
 class Board(Scene):
     """
     The board
     """
     def __init__(self, width, height):
         super().__init__()
-        self.players = [Player( "1", "assets/laughing.png", 0, 0), Player("2","assets/neutral.png", 0, 50), Player("3", "assets/shy.png", 50, 0), Player("4","assets/smile.png", 50, 50)]
+        path = os.path.join('assets', 'laughing.png')
+        self.players = [
+            Human("1", "assets/laughing.png", 0, 0),
+            Computer("2","assets/neutral.png", 0, 50, 50),
+            Computer("3", "assets/shy.png", 50, 0, 90), 
+            Computer("4","assets/smile.png", 50, 50, 100)
+            ]
         self.current_player = 0
         self.dice = Dice()
         self.moves = self.dice.roll()
@@ -137,14 +146,18 @@ class Board(Scene):
         return self.board[x][y].color
     
     def process_input(self, events):
-        for event in events:
-            # print(event)
-            if event.type == pygame.KEYUP:
-                # send key strokes to the board
-                self.move_player(event.key, self.players[self.current_player])
-                # escape to quit
-                if event.key == pygame.K_ESCAPE: 
-                    self.running = False
+        if type(self.players[self.current_player]) is Human:    
+            for event in events:
+                # print(event)
+                if event.type == pygame.KEYUP:
+                    # send key strokes to the board
+                    self.move_player(event.key, self.players[self.current_player])
+                    # escape to quit
+                    if event.key == pygame.K_ESCAPE: 
+                        self.running = False
+        else:
+            self.players[self.current_player].move(self.board, self.cell_width, self.cell_height)
+            self.cycle_turn()
     def update(self):
         pass
 

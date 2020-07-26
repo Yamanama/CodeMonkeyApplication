@@ -1,8 +1,11 @@
 from Scene import Scene
 from Victory import Victory
 from DatabaseHandler import DatabaseHandler
+from Human import Human
+from Computer import Computer
 import random
 import pygame
+import time
 class Question(Scene):
     def __init__(self, color, previous, player, final):
         super().__init__()
@@ -19,28 +22,32 @@ class Question(Scene):
         self.answers += self.question['incorrect']
         random.shuffle(self.answers)
         self.font = pygame.font.SysFont("Arial", 14) 
+        self.selected_answer = ""
         self.width, self.height = pygame.display.get_surface().get_size()
+        self.delay = 0
     def process_input(self, events):
-        selected_answer = ""
-        for event in events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                self.switch_scene(self.previous)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    selected_answer = self.answers[0]
-                if event.key == pygame.K_2:
-                    selected_answer = self.answers[1]
-                if event.key == pygame.K_3:
-                    selected_answer = self.answers[2]
-                if event.key == pygame.K_4:
-                    selected_answer = self.answers[3]
-        if selected_answer != '':
+        if type(self.player) is Human:    
+            for event in events:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    self.switch_scene(self.previous)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        self.selected_answer = self.answers[0]
+                    if event.key == pygame.K_2:
+                        self.selected_answer = self.answers[1]
+                    if event.key == pygame.K_3:
+                        self.selected_answer = self.answers[2]
+                    if event.key == pygame.K_4:
+                        self.selected_answer = self.answers[3]
+        else:
+            self.selected_answer = self.player.answer_question(self.question, self.answers)
+        if self.selected_answer != '':
             if self.final:
-                print("FINAL ANSWER", selected_answer, self.question['correct'])
-                if selected_answer == self.question['correct']:
+                print("FINAL ANSWER", self.selected_answer, self.question['correct'])
+                if self.selected_answer == self.question['correct']:
                     self.switch_scene(Victory(self.player))
             else:
-                if selected_answer == self.question['correct']:
+                if self.selected_answer == self.question['correct']:
                     self.player.add_pie(self.color)
                 self.previous.next = self.previous
                 self.switch_scene(self.previous)
@@ -55,12 +62,19 @@ class Question(Scene):
         question_rect = question.get_rect(center=(self.width/2, self.height/3))
         screen.blit(question, question_rect)
         offset = 50
+        if self.selected_answer == self.question['correct']:
+            color = 'green'
+        else:
+            color = 'red'
         for i in range(len(self.answers)):
             answer = self.font.render(str(i + 1) + ": " + self.answers[i], True, pygame.Color(self.color))
             answer_rect = answer.get_rect(center=(self.width/2, self.height/3 + offset))
+            if self.answers[i] == self.selected_answer:
+                pygame.draw.rect(screen, pygame.Color(color), answer_rect, 2)
+                
             screen.blit(answer, answer_rect)
             offset += 50
-
+        pygame.time.wait(1000)
 
 
         

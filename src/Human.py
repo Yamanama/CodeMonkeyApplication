@@ -5,6 +5,6 @@ class Human(Player):
     """
     Human Player class
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, avatar, offsetX, offsetY):
+        super().__init__(name, avatar, offsetX, offsetY)
 
