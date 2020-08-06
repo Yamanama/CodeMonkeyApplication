@@ -1,7 +1,8 @@
 import pygame
 from Scene import Scene
-from Board import Board
-from Player import Player
+from Settings import Settings
+from Human import Human
+from Computer import Computer
 from Question import Question
 class Title(Scene):
     """
@@ -20,10 +21,18 @@ class Title(Scene):
         self.subtitle_rect = self.subtitle.get_rect(center=(self.width/2, self.height/2))
         self.action_rect = self.action.get_rect(center=(self.width/2, self.height*2/3))
         self.company_rect = self.company.get_rect(center=(self.width/2, self.height - self.company.get_height()/2))
+        self.players = [
+            Human("1", "assets/laughing.png", 0, 0),
+            Computer("2","assets/neutral.png", 0, 50, 50),
+            Computer("3", "assets/shy.png", 50, 0, 90), 
+            Computer("4","assets/smile.png", 50, 50, 100)
+            ]
+        self.direction = 1
+        self.current = 0
     def process_input(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                self.switch_scene(Board(self.width, self.height))
+                self.switch_scene(Settings(self.players))
     def update(self):
         pass
     
@@ -35,3 +44,16 @@ class Title(Scene):
         screen.blit(self.subtitle, self.subtitle_rect)
         screen.blit(self.action, self.action_rect)
         screen.blit(self.company, self.company_rect)
+        self.update_players_position(screen)
+        self.draw_players(screen, self.current, screen.get_width()/2 + 50)
+    
+    def draw_players(self, screen, x, y):
+        for player in self.players:
+            player.draw_face(screen, x, y, 50, 50)
+            x += 75
+    def update_players_position(self, screen):
+        if self.current == 0:
+            self.direction = 1
+        if self.current == screen.get_width() - (75 *4 -25 ):
+            self.direction = -1
+        self.current += self.direction
