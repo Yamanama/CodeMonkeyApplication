@@ -7,7 +7,6 @@ from Scene import Scene
 from Dice import Dice
 import pygame
 import os
-import time
 class Board(Scene):
     """
     The board

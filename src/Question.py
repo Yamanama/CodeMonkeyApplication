@@ -5,7 +5,6 @@ from Human import Human
 from Computer import Computer
 import random
 import pygame
-import time
 class Question(Scene):
     def __init__(self, color, previous, player, final):
         super().__init__()
