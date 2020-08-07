@@ -1,3 +1,4 @@
+import logging
 from Cell import Cell
 from Computer import Computer
 from Human import Human
@@ -11,18 +12,17 @@ class Board(Scene):
     """
     The board
     """
-    def __init__(self, width, height):
+    def __init__(self, width, height, mode, players):
         super().__init__()
-        path = os.path.join('assets', 'laughing.png')
-        self.players = [
-            Human("1", "assets/laughing.png", 0, 0),
-            Computer("2","assets/neutral.png", 0, 50, 50),
-            Computer("3", "assets/shy.png", 50, 0, 90), 
-            Computer("4","assets/smile.png", 50, 50, 100)
-            ]
+        self.logger = logging.getLogger("Board")
+        logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
+        self.logger.info("Creating Board")
+        self.players = players
         self.current_player = 0
+        self.logger.info("Polishing Dice")
         self.dice = Dice()
         self.moves = self.dice.roll()
+        self.mode = mode
         # The board
         self.board = [
             [Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('white')],

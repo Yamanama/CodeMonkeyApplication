@@ -1,6 +1,6 @@
 import pygame
 from Scene import Scene
-from Settings import Settings
+from QueryHumans import QueryHumans
 from Human import Human
 from Computer import Computer
 from Question import Question
@@ -14,7 +14,7 @@ class Title(Scene):
         self.small_font = pygame.font.SysFont("Arial", 14)       
         self.title = self.font.render("Trivial Purfuit", True, (0,128,0))
         self.company = self.small_font.render("Brought to you by Code Monkey's", True, (0,128,0))
-        self.subtitle = self.font.render("Minimal Edition", True, (0,128,0))
+        self.subtitle = self.font.render("Freedom Edition", True, (0,128,0))
         self.action = self.small_font.render("Press <RETURN> To Start", True, (0,128,0))
         self.width, self.height = pygame.display.get_surface().get_size()
         self.title_rect = self.title.get_rect(center=(self.width/2, self.height/3))
@@ -32,12 +32,12 @@ class Title(Scene):
     def process_input(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                self.switch_scene(Settings(self.players))
+                self.switch_scene(QueryHumans())
     def update(self):
         pass
     
     def render(self, screen):
-        caption = "Trivial Purfuit - Minimal Edition"
+        caption = "Trivial Purfuit - Freedom Edition"
         pygame.display.set_caption(caption)
         screen.fill(pygame.Color('black'))
         screen.blit(self.title, self.title_rect)
@@ -51,6 +51,7 @@ class Title(Scene):
         for player in self.players:
             player.draw_face(screen, x, y, 50, 50)
             x += 75
+    
     def update_players_position(self, screen):
         if self.current == 0:
             self.direction = 1
