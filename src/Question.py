@@ -5,9 +5,12 @@ from Human import Human
 from Computer import Computer
 import random
 import pygame
+import logging
 class Question(Scene):
-    def __init__(self, color, previous, player, final):
+    def __init__(self, color, previous, player, final, give_pie=False):
         super().__init__()
+        self.logger = logging.getLogger("Question")
+        logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
         self.final = final
         self.color = color
         self.previous = previous
@@ -24,6 +27,8 @@ class Question(Scene):
         self.selected_answer = ""
         self.width, self.height = pygame.display.get_surface().get_size()
         self.delay = 0
+        self.give_pie = give_pie
+        self.logger.info("Asking {0} a {1} question".format(self.player.name, self.color))
     def process_input(self, events):
         if type(self.player) is Human:    
             for event in events:
@@ -41,13 +46,18 @@ class Question(Scene):
         else:
             self.selected_answer = self.player.answer_question(self.question, self.answers)
         if self.selected_answer != '':
+            self.logger.info("{0} answered {1} which is correct".format(self.player.name, self.selected_answer) if self.selected_answer == self.question['correct'] else "{0} answered {1} which is incorrect".format(self.player.name, self.selected_answer))
             if self.final:
-                print("FINAL ANSWER", self.selected_answer, self.question['correct'])
                 if self.selected_answer == self.question['correct']:
                     self.switch_scene(Victory(self.player))
+                else:
+                    self.previous.switch_player()
             else:
                 if self.selected_answer == self.question['correct']:
-                    self.player.add_pie(self.color)
+                    if self.give_pie:
+                        self.player.add_pie(self.color)
+                else:
+                    self.previous.switch_player()
                 self.previous.next = self.previous
                 self.switch_scene(self.previous)
     def update(self):
@@ -70,7 +80,6 @@ class Question(Scene):
             answer_rect = answer.get_rect(center=(self.width/2, self.height/3 + offset))
             if self.answers[i] == self.selected_answer:
                 pygame.draw.rect(screen, pygame.Color(color), answer_rect, 2)
-                
             screen.blit(answer, answer_rect)
             offset += 50
         pygame.time.wait(1000)

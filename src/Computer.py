@@ -16,6 +16,7 @@ class Computer(Player):
       super().__init__(name, avatar, offsetX, offsetY)
       self.name = random.choice(names) + "-Bot"
       self.difficulty = difficulty
+      self.last_direction = None
    
    def answer_question(self, question, answers):
       """
@@ -29,21 +30,12 @@ class Computer(Player):
       else:
          return random.choice(answers)
 
-   def move(self, board, width, height):
-      up = self.x
+   def move(self, board, width, height, mode):
       xPos = int(self.x/width)
       yPos = int(self.y/height)
-      possibles = [
-         [xPos - 1, yPos],
-         [xPos + 1, yPos],
-         [xPos, yPos - 1],
-         [xPos, yPos + 1]
-      ]
-      positions = []
-      for i in possibles:
-         if self.check_cell(board,i[0], i[1]):
-            positions.append([i[0]*width, i[1]*height])
-      choice = random.choice(positions)
+      possibles = self.build_possibles(board, xPos, yPos, width, height, mode)
+      choice = random.choice(possibles)
+      self.last_direction = self.determine_direction(choice)
       self.x = choice[0]
       self.y = choice[1]
       pygame.time.wait(1000)
@@ -57,3 +49,35 @@ class Computer(Player):
          return True
       else:
          return False
+   
+   def build_possibles(self, board, xPos, yPos, width, height, mode):
+      possibles = []
+      if mode == 'traditional':
+         if self.last_direction != "north" and self.check_cell(board, xPos, yPos - 1):
+            possibles.append([xPos*width, (yPos - 1)*height])
+         if self.last_direction != "south" and self.check_cell(board, xPos, yPos + 1):
+            possibles.append([xPos*width, (yPos + 1)*height])
+         if self.last_direction != "west" and self.check_cell(board, xPos + 1, yPos):
+            possibles.append([(xPos + 1)*width, yPos*height])
+         if self.last_direction != "east" and self.check_cell(board, xPos - 1, yPos):
+            possibles.append([(xPos - 1)*width, yPos*height])
+      else:
+         if self.check_cell(board, xPos, yPos - 1):
+            possibles.append([xPos*width, (yPos - 1)*height])
+         if self.check_cell(board, xPos, yPos + 1):
+            possibles.append([xPos*width, (yPos + 1)*height])
+         if self.check_cell(board, xPos + 1, yPos):
+            possibles.append([(xPos + 1)*width, yPos*height])
+         if self.check_cell(board, xPos - 1, yPos):
+            possibles.append([(xPos - 1)*width, yPos*height])
+      return possibles
+   
+   def determine_direction(self, choice):
+      if choice[0] < self.x:
+         return "west"
+      if choice[0] > self.x:
+         return "east"
+      if choice[1] < self.y:
+         return "south"
+      if choice[1] > self.y:
+         return "north"

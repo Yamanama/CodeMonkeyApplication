@@ -1,5 +1,6 @@
 import logging
 from Cell import Cell
+from Headquarter import Headquarter
 from Computer import Computer
 from Human import Human
 from Question import Question
@@ -23,17 +24,18 @@ class Board(Scene):
         self.dice = Dice()
         self.moves = self.dice.roll()
         self.mode = mode
+        self.last_direction = None
         # The board
         self.board = [
-            [Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('white')],
+            [Cell('red'), Cell('white'), Cell('blue'), Cell('red'), Headquarter('green'), Cell('white'), Cell('blue'), Cell('green'), Cell('white')],
             [Cell('white'), None, None, None, Cell('blue'), None, None, None, Cell('blue')],
             [Cell('blue'), None, None, None, Cell('white'), None, None, None, Cell('green')],
             [Cell('green'), None, None, None, Cell('green'), None, None, None, Cell('red')],
-            [Cell('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('black'), Cell('green'), Cell('red'), Cell('blue'), Cell('white')],
+            [Headquarter('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('black'), Cell('green'), Cell('red'), Cell('blue'), Headquarter('white')],
             [Cell('blue'), None, None, None, Cell('green'), None, None, None, Cell('blue')],
             [Cell('green'), None, None, None, Cell('white'), None, None, None, Cell('green')],
             [Cell('red'), None, None, None, Cell('red'), None, None, None, Cell('red')],
-            [Cell('white'), Cell('blue'), Cell('red'), Cell('green'), Cell('blue'), Cell('white'), Cell('red'), Cell('green'), Cell('blue')],      
+            [Cell('white'), Cell('blue'), Cell('red'), Cell('green'), Headquarter('blue'), Cell('white'), Cell('red'), Cell('green'), Cell('blue')],      
         ]
         self.width = width
         self.height = height
@@ -44,45 +46,47 @@ class Board(Scene):
         """
         Move players around the board
         """
-        if direction == pygame.K_LEFT:
-            left = int((player.x-self.cell_width)/self.cell_width)
-            if left < 0:
-                return
-            cell = self.board[left][int(player.y/self.cell_height)]
-            if cell is not None:
-                player.x -= 100
-                self.cycle_turn()
-        if direction == pygame.K_RIGHT:
-            right = int((player.x+self.cell_width)/self.cell_width)
-            print("RIGHT:", right)
-            if right > len(self.board[0]) - 1:
-                return
-            cell = self.board[right][int(player.y/self.cell_height)]
-            if cell is not None:
-                player.x += 100
-                self.cycle_turn()
-        if direction == pygame.K_UP:
-            up = int((player.y-self.cell_height)/self.cell_height)
-            print("UP:", up)
-            if up < 0:
-                return
-            cell = self.board[int((player.x)/self.cell_width)][int(up)]
-            if cell is not None:
-                player.y -= 100
-                self.cycle_turn()
-        if direction == pygame.K_DOWN:
-            down = int((player.y+self.cell_height)/self.cell_height)
-            print("DOWN", down)
-            if down > len(self.board) - 1:
-                return
-            cell = self.board[int((player.x)/self.cell_width)][int(down)]
-            if cell is not None:
-                player.y += 100
-                self.cycle_turn()
-    def cycle_turn(self):
+        if self.last_direction != pygame.K_RIGHT or self.mode == 'rapid':
+            if direction == pygame.K_LEFT:
+                left = int((player.x-self.cell_width)/self.cell_width)
+                if left < 0:
+                    return
+                cell = self.board[left][int(player.y/self.cell_height)]
+                if cell is not None:
+                    player.x -= 100
+                    self.cycle_turn(direction)
+        if self.last_direction != pygame.K_LEFT or self.mode == 'rapid':
+            if direction == pygame.K_RIGHT:
+                right = int((player.x+self.cell_width)/self.cell_width)
+                if right > len(self.board[0]) - 1:
+                    return
+                cell = self.board[right][int(player.y/self.cell_height)]
+                if cell is not None:
+                    player.x += 100
+                    self.cycle_turn(direction)
+        if self.last_direction != pygame.K_DOWN or self.mode == 'rapid':
+            if direction == pygame.K_UP:
+                up = int((player.y-self.cell_height)/self.cell_height)
+                if up < 0:
+                    return
+                cell = self.board[int((player.x)/self.cell_width)][int(up)]
+                if cell is not None:
+                    player.y -= 100
+                    self.cycle_turn(direction)
+        if self.last_direction != pygame.K_UP or self.mode == 'rapid':
+            if direction == pygame.K_DOWN:
+                down = int((player.y+self.cell_height)/self.cell_height)
+                if down > len(self.board) - 1:
+                    return
+                cell = self.board[int((player.x)/self.cell_width)][int(down)]
+                if cell is not None:
+                    player.y += 100
+                    self.cycle_turn(direction)
+    def cycle_turn(self, direction):
         """
         Cycle the turn after moves are 0
         """
+        self.last_direction = direction
         self.moves -= 1
         if self.moves <= 0:
             self.moves = self.dice.roll()
@@ -95,13 +99,16 @@ class Board(Scene):
         column = int(current_player.x/self.cell_width)
         row = int(current_player.y/self.cell_height)
         color = self.get_cell_color(row, column)
+        
         if color != 'black':
-            self.switch_scene(Question(color, self, current_player, False))
+            self.switch_scene(Question(color, self, current_player, False, type(self.board[row][column]) is Headquarter or self.mode == 'rapid'))
         else:
             if len(current_player.pies) == 4:
                 self.switch_scene(Question(color, self, current_player, True))
             else:
-                self.switch_scene(Question(color, self, current_player, False))
+                self.switch_scene(Question(color, self, current_player, False, type(self.board[row][column]) is Headquarter or self.mode == 'rapid'))
+
+    def switch_player(self):
         self.current_player +=1
         if self.current_player > 3:
             self.current_player = 0
@@ -138,6 +145,10 @@ class Board(Scene):
                 if self.board[column][row] is not None:
                     cell = self.board[column][row]
                     pygame.draw.rect(screen, pygame.Color(cell.color), (row*self.cell_width, column*self.cell_height, self.cell_width, self.cell_height))
+                    if type(cell) is Headquarter and self.mode == "traditional":    
+                        img = pygame.image.load("assets/cake.png")
+                        img = pygame.transform.scale(img, (int(self.cell_width),int(self.cell_height)))
+                        screen.blit(img, (row*self.cell_width, column*self.cell_height, self.cell_width, self.cell_height))
     def get_cell_color(self, x,y):
         """
         Get the color of a cell
@@ -147,7 +158,6 @@ class Board(Scene):
     def process_input(self, events):
         if type(self.players[self.current_player]) is Human:    
             for event in events:
-                # print(event)
                 if event.type == pygame.KEYUP:
                     # send key strokes to the board
                     self.move_player(event.key, self.players[self.current_player])
@@ -155,8 +165,8 @@ class Board(Scene):
                     if event.key == pygame.K_ESCAPE: 
                         self.running = False
         else:
-            self.players[self.current_player].move(self.board, self.cell_width, self.cell_height)
-            self.cycle_turn()
+            self.players[self.current_player].move(self.board, self.cell_width, self.cell_height, self.mode)
+            self.cycle_turn(None)
     def update(self):
         pass
 

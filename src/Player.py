@@ -1,12 +1,14 @@
 import pygame
+import logging
 
 class Player():
     """
     Player
     """
     def __init__(self, name, avatar="assets/laughing.png", offsetX=0, offsetY=0):
-        # TODO: Hook up to settings scene?
         self.name = name
+        self.logger = logging.getLogger(self.name)
+        logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
         self.avatar = avatar
         self.x = 400
         self.y = 400
@@ -47,4 +49,5 @@ class Player():
     
     def add_pie(self, color):
         if color not in self.pies:
+            self.logger.info("Getting a piece of cake!")
             self.pies.append(color)

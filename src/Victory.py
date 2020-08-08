@@ -7,7 +7,7 @@ class Victory(Scene):
         self.width, self.height = pygame.display.get_surface().get_size()
         self.font = pygame.font.SysFont("Arial", 32) 
         self.small_font = pygame.font.SysFont("Arial", 14)       
-        self.message = self.font.render("Congratulations. You win!".format(player.name), True, (0,128,0))
+        self.message = self.font.render("Congratulations {0}. You win!".format(player.name), True, (0,128,0))
         self.exit_message = self.small_font.render("Press <esc> to exit", True, (0,128,0))
         self.message_rect = self.message.get_rect(center=(self.width/2, self.height/3))
         self.exit_rect = self.exit_message.get_rect(center=(self.width/2, self.height - self.exit_message.get_height()/2))
