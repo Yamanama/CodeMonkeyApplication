@@ -13,7 +13,7 @@ class QueryMode(Settings):
         self.logger = logging.getLogger("Settings")
         logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
         self.players = players
-        self.mode = ""
+        self.mode = "traditional"
         self.width, self.height = pygame.display.get_surface().get_size()
         self.logger.info("Querying for mode")
     def process_input(self, events):
@@ -39,8 +39,8 @@ class QueryMode(Settings):
             if event.key == pygame.K_r:
                 self.logger.info("Rapid Mode Selected")
                 self.mode = "rapid"
-        if self.mode != "":
-            self.switch_scene(Board(self.width, self.height, self.mode, self.players))
+            if event.key == pygame.K_RETURN:
+                self.switch_scene(Board(self.width, self.height, self.mode, self.players))
         
     def query_user(self, screen):
         self.title = self.font.render("Select Game Mode", True, (0,128,0))

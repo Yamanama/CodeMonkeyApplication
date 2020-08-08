@@ -11,7 +11,7 @@ class QueryHumans(Settings):
         self.logger = logging.getLogger("Settings")
         logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
         self.logger.info("Querying Number of humans")
-        self.number_of_players = ""
+        self.number_of_players = 1
     
     def process_input(self, events):
         for event in events:
@@ -41,7 +41,7 @@ class QueryHumans(Settings):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_4:
             self.logger.info("Four human player selected")
             self.number_of_players = 4
-        if self.number_of_players != "":
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
             self.switch_scene(QueryNames(self.number_of_players))
     def query_human_players(self, screen):
         self.title = self.font.render("How Many Human Players? Enter 1-4", True, (0,128,0))

@@ -109,6 +109,7 @@ class Board(Scene):
                 self.switch_scene(Question(color, self, current_player, False, type(self.board[row][column]) is Headquarter or self.mode == 'rapid'))
 
     def switch_player(self):
+        self.last_direction = None
         self.current_player +=1
         if self.current_player > 3:
             self.current_player = 0
