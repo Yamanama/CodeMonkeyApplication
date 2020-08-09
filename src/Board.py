@@ -104,6 +104,7 @@ class Board(Scene):
         self.moves -= 1
         if self.moves <= 0:
             self.moves = self.dice.roll()
+            self.last_direction = None
             self.next_player()
 
     def next_player(self):
@@ -127,6 +128,7 @@ class Board(Scene):
 
     def switch_player(self):
         self.last_direction = None
+        self.moves = self.dice.roll()
         self.current_player += 1
         if self.current_player > 3:
             self.current_player = 0

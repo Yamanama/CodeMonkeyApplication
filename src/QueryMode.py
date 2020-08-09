@@ -39,12 +39,12 @@ class QueryMode(Settings):
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_t:
-                self.logger.info("Traditional Mode Selected")
                 self.mode = "traditional"
             if event.key == pygame.K_r:
-                self.logger.info("Rapid Mode Selected")
                 self.mode = "rapid"
             if event.key == pygame.K_RETURN:
+                self.logger.info("{0} mode selected".format(
+                    self.mode.capitalize()))
                 self.switch_scene(
                     Board(self.width, self.height, self.mode, self.players))
 
