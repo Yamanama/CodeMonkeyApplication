@@ -35,6 +35,11 @@ class Question(Scene):
             self.player.name, self.color))
 
     def process_input(self, events):
+        """Process User Input
+
+        Args:
+            events (Pygame Event): User Driven event
+        """
         if type(self.player) is Human:
             for event in events:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
@@ -72,6 +77,11 @@ class Question(Scene):
         pass
 
     def render(self, screen):
+        """Render scene
+
+        Args:
+            screen (Pygame surface): surface to render scene on
+        """
         caption = "Question for " + self.player.name
         pygame.display.set_caption(caption)
         screen.fill(pygame.Color('black'))

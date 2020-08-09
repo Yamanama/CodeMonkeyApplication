@@ -5,6 +5,19 @@ import pygame
 class Victory(Scene):
     def __init__(self, player):
         super().__init__()
+        self.logger = logging.getLogger(__name__)
+        logging.basicConfig(
+            format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
+        self.logger.info("{0} wins!".format(player.name))
+        self.logger.info(
+            "Trivial purfuit - Freedom Edition, brought to you by Code Monkey's")
+        self.logger.info("  Project Manager: Andrew Zhao")
+        self.logger.info("  Lead Architect: Benjamin Yliniemi")
+        self.logger.info("  Lead Programmer: Milosz Krasowski")
+        self.logger.info("  Lead Tester: Genta Bordoniqi")
+        self.logger.info(
+            "  Lead Software Quality and Assurance Engineer:  Jenni Ryan Hall")
+
         self.player = player
         self.width, self.height = pygame.display.get_surface().get_size()
         self.font = pygame.font.SysFont("Arial", 32)
