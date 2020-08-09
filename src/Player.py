@@ -1,14 +1,17 @@
 import pygame
 import logging
 
+
 class Player():
     """
     Player
     """
+
     def __init__(self, name, avatar="assets/laughing.png", offsetX=0, offsetY=0):
         self.name = name
         self.logger = logging.getLogger(self.name)
-        logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
+        logging.basicConfig(
+            format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
         self.avatar = avatar
         self.x = 400
         self.y = 400
@@ -21,18 +24,18 @@ class Player():
         Draw the player on the board
         """
         img = pygame.image.load(self.avatar)
-        img = pygame.transform.scale(img, (50,50))
+        img = pygame.transform.scale(img, (50, 50))
         screen.blit(img, (self.x + self.offsetX, self.y + self.offsetY))
-        
+
     def draw_statistics(self, screen, x, y):
         """
         Draw the statistics (The big head)
         """
         img = pygame.image.load(self.avatar)
-        img = pygame.transform.scale(img, (150,150))
+        img = pygame.transform.scale(img, (150, 150))
         screen.blit(img, (x + 75, y))
         self.draw_pies(screen, x, y + 200)
-    
+
     def draw_face(self, screen, x, y, width, height):
         img = pygame.image.load(self.avatar)
         img = pygame.transform.scale(img, (width, height))
@@ -46,7 +49,7 @@ class Player():
         for pie in self.pies:
             pygame.draw.rect(screen, pygame.Color(pie), (x, y, 50, 50))
             x += 75
-    
+
     def add_pie(self, color):
         if color not in self.pies:
             self.logger.info("Getting a piece of cake!")

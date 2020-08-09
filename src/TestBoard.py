@@ -1,6 +1,7 @@
 import unittest
 from Board import Board
 
+
 class TestBoard(unittest.TestCase):
 
     def test_location(self):
@@ -8,5 +9,6 @@ class TestBoard(unittest.TestCase):
         color = board.location()
         self.assertIn(color, board.colors)
 
-if __name__ == '__main__': #pragma no cover
+
+if __name__ == '__main__':  # pragma no cover
     unittest.main()

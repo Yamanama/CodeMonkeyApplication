@@ -9,14 +9,18 @@ from Scene import Scene
 from Dice import Dice
 import pygame
 import os
+
+
 class Board(Scene):
     """
     The board
     """
+
     def __init__(self, width, height, mode, players):
         super().__init__()
         self.logger = logging.getLogger("Board")
-        logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
+        logging.basicConfig(
+            format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
         self.logger.info("Creating Board")
         self.players = players
         self.current_player = 0
@@ -27,19 +31,28 @@ class Board(Scene):
         self.last_direction = None
         # The board
         self.board = [
-            [Cell('red'), Cell('white'), Cell('blue'), Cell('red'), Headquarter('green'), Cell('white'), Cell('blue'), Cell('green'), Cell('white')],
-            [Cell('white'), None, None, None, Cell('blue'), None, None, None, Cell('blue')],
-            [Cell('blue'), None, None, None, Cell('white'), None, None, None, Cell('green')],
-            [Cell('green'), None, None, None, Cell('green'), None, None, None, Cell('red')],
-            [Headquarter('red'), Cell('white'), Cell('blue'), Cell('green'), Cell('black'), Cell('green'), Cell('red'), Cell('blue'), Headquarter('white')],
-            [Cell('blue'), None, None, None, Cell('green'), None, None, None, Cell('blue')],
-            [Cell('green'), None, None, None, Cell('white'), None, None, None, Cell('green')],
-            [Cell('red'), None, None, None, Cell('red'), None, None, None, Cell('red')],
-            [Cell('white'), Cell('blue'), Cell('red'), Cell('green'), Headquarter('blue'), Cell('white'), Cell('red'), Cell('green'), Cell('blue')],      
+            [Cell('red'), Cell('white'), Cell('blue'), Cell('red'), Headquarter(
+                'green'), Cell('white'), Cell('blue'), Cell('green'), Cell('white')],
+            [Cell('white'), None, None, None, Cell(
+                'blue'), None, None, None, Cell('blue')],
+            [Cell('blue'), None, None, None, Cell('white'),
+             None, None, None, Cell('green')],
+            [Cell('green'), None, None, None, Cell(
+                'green'), None, None, None, Cell('red')],
+            [Headquarter('red'), Cell('white'), Cell('blue'), Cell('green'), Cell(
+                'black'), Cell('green'), Cell('red'), Cell('blue'), Headquarter('white')],
+            [Cell('blue'), None, None, None, Cell(
+                'green'), None, None, None, Cell('blue')],
+            [Cell('green'), None, None, None, Cell(
+                'white'), None, None, None, Cell('green')],
+            [Cell('red'), None, None, None, Cell(
+                'red'), None, None, None, Cell('red')],
+            [Cell('white'), Cell('blue'), Cell('red'), Cell('green'), Headquarter(
+                'blue'), Cell('white'), Cell('red'), Cell('green'), Cell('blue')],
         ]
         self.width = width
         self.height = height
-        self.cell_width = width / len(self.board) 
+        self.cell_width = width / len(self.board)
         self.cell_height = height / len(self.board[0])
 
     def move_player(self, direction, player):
@@ -82,6 +95,7 @@ class Board(Scene):
                 if cell is not None:
                     player.y += 100
                     self.cycle_turn(direction)
+
     def cycle_turn(self, direction):
         """
         Cycle the turn after moves are 0
@@ -91,6 +105,7 @@ class Board(Scene):
         if self.moves <= 0:
             self.moves = self.dice.roll()
             self.next_player()
+
     def next_player(self):
         """
         Go to the next player
@@ -99,20 +114,23 @@ class Board(Scene):
         column = int(current_player.x/self.cell_width)
         row = int(current_player.y/self.cell_height)
         color = self.get_cell_color(row, column)
-        
+
         if color != 'black':
-            self.switch_scene(Question(color, self, current_player, False, type(self.board[row][column]) is Headquarter or self.mode == 'rapid'))
+            self.switch_scene(Question(color, self, current_player, False, type(
+                self.board[row][column]) is Headquarter or self.mode == 'rapid'))
         else:
             if len(current_player.pies) == 4:
                 self.switch_scene(Question(color, self, current_player, True))
             else:
-                self.switch_scene(Question(color, self, current_player, False, type(self.board[row][column]) is Headquarter or self.mode == 'rapid'))
+                self.switch_scene(Question(color, self, current_player, False, type(
+                    self.board[row][column]) is Headquarter or self.mode == 'rapid'))
 
     def switch_player(self):
         self.last_direction = None
-        self.current_player +=1
+        self.current_player += 1
         if self.current_player > 3:
             self.current_player = 0
+
     def draw(self, screen):
         """
         Draw the board on screen
@@ -121,6 +139,7 @@ class Board(Scene):
         self.draw_board(screen)
         self.draw_player_stats(screen)
         self.draw_players(screen)
+
     def draw_player_stats(self, screen):
         """
         Draw the 'player stats (The big head)
@@ -129,51 +148,62 @@ class Board(Scene):
         self.players[1].draw_statistics(screen, 500, 110)
         self.players[2].draw_statistics(screen, 100, 510)
         self.players[3].draw_statistics(screen, 500, 510)
+
     def draw_players(self, screen):
         """
         Draw the players on the square they're on
         """
         for player in range(len(self.players)):
             self.players[player].draw(screen)
+
     def draw_board(self, screen):
         """
         Draw the board
         """
-        cell_width = self.width / len(self.board) 
+        cell_width = self.width / len(self.board)
         cell_height = self.height / len(self.board[0])
         for row in range(len(self.board)):
             for column in range(len(self.board[row])):
                 if self.board[column][row] is not None:
                     cell = self.board[column][row]
-                    pygame.draw.rect(screen, pygame.Color(cell.color), (row*self.cell_width, column*self.cell_height, self.cell_width, self.cell_height))
-                    if type(cell) is Headquarter and self.mode == "traditional":    
+                    pygame.draw.rect(screen, pygame.Color(
+                        cell.color), (row*self.cell_width, column*self.cell_height, self.cell_width, self.cell_height))
+                    if type(cell) is Headquarter and self.mode == "traditional":
                         img = pygame.image.load("assets/cake.png")
-                        img = pygame.transform.scale(img, (int(self.cell_width),int(self.cell_height)))
-                        screen.blit(img, (row*self.cell_width, column*self.cell_height, self.cell_width, self.cell_height))
-    def get_cell_color(self, x,y):
+                        img = pygame.transform.scale(
+                            img, (int(self.cell_width), int(self.cell_height)))
+                        screen.blit(img, (row*self.cell_width, column *
+                                          self.cell_height, self.cell_width, self.cell_height))
+
+    def get_cell_color(self, x, y):
         """
         Get the color of a cell
         """
         return self.board[x][y].color
-    
+
     def process_input(self, events):
-        if type(self.players[self.current_player]) is Human:    
+        if type(self.players[self.current_player]) is Human:
             for event in events:
                 if event.type == pygame.KEYUP:
                     # send key strokes to the board
-                    self.move_player(event.key, self.players[self.current_player])
+                    self.move_player(
+                        event.key, self.players[self.current_player])
                     # escape to quit
-                    if event.key == pygame.K_ESCAPE: 
+                    if event.key == pygame.K_ESCAPE:
                         self.running = False
         else:
-            self.players[self.current_player].move(self.board, self.cell_width, self.cell_height, self.mode)
+            self.players[self.current_player].move(
+                self.board, self.cell_width, self.cell_height, self.mode)
             self.cycle_turn(None)
+
     def update(self):
         pass
 
-    def render(self,screen):
+    def render(self, screen):
         # Change the caption to the player and moves
-        caption = "Player:" + str(self.players[self.current_player].name) + " Moves: " + str(self.moves)
+        caption = "Player:" + \
+            str(self.players[self.current_player].name) + \
+            " Moves: " + str(self.moves)
         # Display the caption
         pygame.display.set_caption(caption)
         self.draw(screen)

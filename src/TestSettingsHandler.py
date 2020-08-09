@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from SettingsHandler import SettingsHandler
 
+
 class TestSettingsHandler(unittest.TestCase):
 
     @patch("builtins.input", return_value=1)
@@ -17,5 +18,5 @@ class TestSettingsHandler(unittest.TestCase):
         self.assertEqual(ret, 40)
 
 
-if __name__ == '__main__': #pragma no cover
+if __name__ == '__main__':  # pragma no cover
     unittest.main()

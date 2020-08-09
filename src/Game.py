@@ -1,16 +1,20 @@
 import pygame
 import logging
 from Title import Title
+
+
 class Game(object):
     """
     The Game - Based on the pygame framework
 
     """
+
     def __init__(self):
         super().__init__()
         pygame.init()
         self.logger = logging.getLogger("Game")
-        logging.basicConfig(format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
+        logging.basicConfig(
+            format='%(asctime)s - %(name)s: %(levelname)s - %(message)s', level=logging.INFO)
         self.logger.info("Initializing Game")
         self.logger.info("Winding the clock")
         # clock - for FPS
@@ -18,10 +22,12 @@ class Game(object):
         self.background = pygame.Color('black')
         self.screen_width = 900
         self.screen_height = 900
-        self.screen = pygame.display.set_mode((self.screen_width,self.screen_height))
+        self.screen = pygame.display.set_mode(
+            (self.screen_width, self.screen_height))
         self.logger.info("Moving to Title Scene")
         self.active_scene = Title()
         self.running = True
+
     def run(self):
         """
         Run loop - Show the game board
@@ -42,6 +48,7 @@ class Game(object):
             self.clock.tick(60)
         pygame.quit()
 
-if __name__ == "__main__": 
+
+if __name__ == "__main__":
     game = Game()
-    game.run() 
+    game.run()

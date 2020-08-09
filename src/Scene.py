@@ -1,11 +1,14 @@
 import pygame
+
+
 class Scene:
     """
     Base class for scenes
     """
+
     def __init__(self):
         self.next = self
-    
+
     def process_input(self, events):
         """
         process user input
@@ -13,6 +16,7 @@ class Scene:
         Raises - NotImplementedError - override in sub classes
         """
         raise NotImplementedError
+
     def update(self):
         """
         update
@@ -20,6 +24,7 @@ class Scene:
         Raises - NotImplementedError - override in sub classes
         """
         raise NotImplementedError
+
     def render(self, screen):
         """
         render the scene
@@ -27,6 +32,7 @@ class Scene:
         Raises - NotImplementedError - override in sub classes
         """
         raise NotImplementedError
+
     def switch_scene(self, next_scene):
         """
         switch to next scene
