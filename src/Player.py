@@ -34,6 +34,12 @@ class Player():
         img = pygame.image.load(self.avatar)
         img = pygame.transform.scale(img, (150, 150))
         screen.blit(img, (x + 75, y))
+        self.font = pygame.font.SysFont("Arial", 12)
+        self.name_text = self.font.render(
+            self.name, True, pygame.Color('white'))
+        self.name_rect = self.name_text.get_rect(
+            center=(x + 150, y + 175))
+        screen.blit(self.name_text, self.name_rect)
         self.draw_pies(screen, x, y + 200)
 
     def draw_face(self, screen, x, y, width, height):
