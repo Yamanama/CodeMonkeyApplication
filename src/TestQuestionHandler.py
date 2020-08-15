@@ -11,7 +11,7 @@ class TestQuestionHandler(unittest.TestCase):
     def test_query_user_computer(self, input, computer):
         testQuestion = {"question": "testQuestion",
                         "correct": "testCorrect", "incorrect": ["a", "b", "c"]}
-        testPlayer = Computer(40)
+        testPlayer = Computer("testName", "assets/shy.png", 50, 50, 40)
         handler = QuestionHandler()
         ret = handler.query_user(testQuestion, testPlayer)
         self.assertIn(ret, ["testCorrect", "a", "b", "c"])
@@ -20,7 +20,7 @@ class TestQuestionHandler(unittest.TestCase):
     def test_query_user_human(self, input):
         testQuestion = {"question": "testQuestion",
                         "correct": "testCorrect", "incorrect": ["a", "b", "c"]}
-        testPlayer = Human()
+        testPlayer = Human("testName", "assets/shy.png", 50, 50)
         handler = QuestionHandler()
         ret = handler.query_user(testQuestion, testPlayer)
         self.assertIn(ret, ["testCorrect", "a", "b", "c"])

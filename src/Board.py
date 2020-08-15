@@ -176,6 +176,11 @@ class Board(Scene):
                             img, (int(self.cell_width), int(self.cell_height)))
                         screen.blit(img, (row*self.cell_width, column *
                                           self.cell_height, self.cell_width, self.cell_height))
+        img = pygame.image.load("assets/home.png")
+        img = pygame.transform.scale(
+            img, (int(self.cell_width), int(self.cell_height)))
+        screen.blit(img, (4 *self.cell_width, 4 *
+                            self.cell_height, self.cell_width, self.cell_height))
 
     def get_cell_color(self, x, y):
         """
